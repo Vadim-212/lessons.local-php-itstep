@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Class Tag
+ * 
+ * @method static Tag a()
+ * @method static Tag div()
+ * @method static Tag li()
+ * @method static Tag input()
+ */
 class Tag
 {
 
@@ -190,4 +198,9 @@ class Tag
         return $this->toString();
     }
 
+
+    static function __callStatic($name, $arguments)
+    {
+        return new Tag($name, ... $arguments);
+    }
 }
