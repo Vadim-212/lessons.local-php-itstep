@@ -96,5 +96,31 @@ function sql_select($connection, $table, $columns = "*", array $where = []) {
     return sql_query($connection, $query);
 }
 
+function sql_insert($connection, $table, array $values) {
+    $table = sql_escape($connection, $table);
+    $query = "INSERT INTO {$table} VALUES (";
+    $queryValues = [];
+    foreach ($values as $value) {
+        $queryValues[] = is_string($value) ? "'" . sql_escape($connection, $value) . "', " : sql_escape($connection, $value);
+    }
+    $query .= implode(',', $queryValues);
+    return sql_query($connection, $query);
+}
 
-// sql_insert, sql_update, sql_delete
+function sql_update($connection, $table, array $values, array $where) {
+    $table = sql_escape($connection, $table);
+    $query = "UPDATE {$table} SET ";
+    $queryValues = [];
+    foreach ($values as $key => $value) {
+        $queryValues[] = sql_escape($connection, $key) . '=' . (is_string($value) ? "'" . sql_escape($connection, $value) . "'" : sql_escape($connection, $value));
+    }
+    $query .= implode(',', $queryValues) . ' ';
+    $query .= sql_build_where($connection, $where);
+    return sql_query($connection, $query);
+}
+
+function sql_delete($connection, $table, array $values) {
+    $table = sql_escape($connection, $table);
+    $query = "DELETE FROM {$table} " . sql_build_where($connection, $values);
+    return sql_query($connection, $query);
+}

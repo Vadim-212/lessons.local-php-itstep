@@ -1,5 +1,7 @@
 <?php
 
+namespace Tag;
+
 class Name
 {
 
